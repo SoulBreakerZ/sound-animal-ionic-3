@@ -1,0 +1,7 @@
+{
+  "name": "sound-animal",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
