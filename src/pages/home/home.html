@@ -1,14 +1,22 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>
-      Ionic Blank
+      Animal Sound
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <ion-list>
+    <button ion-item detail-none *ngFor="let animal of animales" (click)="reproducir(animal)">
+      <ion-avatar item-left>
+        <img [src]="animal.imagen">
+        
+      </ion-avatar>
+      <ion-icon name="play" item-right *ngIf="!animal.reproduciendo"></ion-icon>
+      <ion-icon name="pause" item-right *ngIf="animal.reproduciendo"></ion-icon>
+
+      <h2>{{animal.nombre}}</h2>
+    </button>
+  </ion-list>
 </ion-content>
