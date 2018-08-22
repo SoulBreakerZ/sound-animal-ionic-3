@@ -1,7 +1,7 @@
 import { Animal } from './../../interfaces/animal.interface';
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { ANIMALES } from './../../data/data.animales';
+import { ANIMALS } from '../../data/data.animals';
+import { NavController, Refresher,reorderArray } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -9,23 +9,62 @@ import { ANIMALES } from './../../data/data.animales';
 })
 export class HomePage {
 
-  animales:Animal[] =[];
+  animals:Animal[] =[];
+  private audio = new Audio();
+  private timeAudio:any;
+  private ordering = false;
 
   constructor(public navCtrl: NavController) {
-    this.animales = ANIMALES.splice(0);
+    this.animals = ANIMALS.slice(0);
   }
 
-  reproducir (animal:Animal){
-    console.log(animal.audio);
-    let audio = new Audio();
-    audio.src = animal.audio;
+  playSound (animal:Animal){
+    this.pauseSound(animal);
 
-    audio.load();
-    audio.play();
+    if (animal.isPlaying){
+      animal.isPlaying = false;
+      return;
+    }
 
-    animal.reproduciendo = true;
+    console.log(animal);
+    this.audio = new Audio();
+    this.audio.src = animal.audio;
 
-    setTimeout(() => animal.reproduciendo = false , animal.duracion * 1000);
+    this.audio.load();
+    this.audio.play();
+
+    animal.isPlaying = true;
+
+    this.timeAudio= setTimeout(() => animal.isPlaying = false , animal.duration * 1000);
+  }
+  
+  private pauseSound(animalSel:Animal){
+    clearTimeout(this.timeAudio);
+    this.audio.pause();
+    this.audio.currentTime = 0;
+
+    this.animals.forEach(animal => {
+      if (animal.id != animalSel.id)
+        animal.isPlaying = false;
+    });
   }
 
+  public deleteAnimal(animalId:Number){
+    this.animals = this.animals.filter(item => item.id !== animalId);
+  }
+
+  doRefreshAnimals(refresher:Refresher) {
+    console.log('Begin async operation', refresher);
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      this.animals = ANIMALS.slice(0);
+      refresher.complete();
+    }, 2000);
+  }
+
+  reorderAnimals(index:any){
+    console.log(index);
+    this.animals = reorderArray(this.animals, index);
+  }
 }

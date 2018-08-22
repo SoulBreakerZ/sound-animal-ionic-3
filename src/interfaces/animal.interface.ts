@@ -1,8 +1,9 @@
 
 export interface Animal {
-    nombre: string;
-    imagen: string;
+    id: number;
+    name: string;
+    image: string;
     audio: string;
-    duracion: number;
-    reproduciendo: boolean;
+    duration: number;
+    isPlaying: boolean;
 }
