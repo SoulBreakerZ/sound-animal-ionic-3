@@ -1,7 +1,8 @@
+import { DetailAnimalPage } from './../detail-animal/detail-animal';
 import { Animal } from './../../interfaces/animal.interface';
 import { Component } from '@angular/core';
 import { ANIMALS } from '../../data/data.animals';
-import { NavController, Refresher,reorderArray } from 'ionic-angular';
+import { NavController,NavParams, Refresher,reorderArray } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -12,13 +13,13 @@ export class HomePage {
   animals:Animal[] =[];
   private audio = new Audio();
   private timeAudio:any;
-  private ordering = false;
+  public ordering = false;
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.animals = ANIMALS.slice(0);
   }
 
-  playSound (animal:Animal){
+  public playSound (animal:Animal){
     this.pauseSound(animal);
 
     if (animal.isPlaying){
@@ -49,11 +50,11 @@ export class HomePage {
     });
   }
 
-  public deleteAnimal(animalId:Number){
+  public animalDelete(animalId:Number){
     this.animals = this.animals.filter(item => item.id !== animalId);
   }
 
-  doRefreshAnimals(refresher:Refresher) {
+  public doRefreshAnimals(refresher:Refresher) {
     console.log('Begin async operation', refresher);
 
     setTimeout(() => {
@@ -63,8 +64,13 @@ export class HomePage {
     }, 2000);
   }
 
-  reorderAnimals(index:any){
+  public reorderAnimals(index:any){
     console.log(index);
     this.animals = reorderArray(this.animals, index);
+  }
+
+  public animalInfo(animal:any){
+    console.log(animal);
+    this.navCtrl.push(DetailAnimalPage,{'animal':animal});
   }
 }
